@@ -49,68 +49,63 @@ export default function Stats({ textToType, typedText, timeElapsed, errors, keys
     }, [typedText, textToType, timeElapsed, errors, keystrokes]);
 
     const getColorClass = (value, thresholds) => {
-        if (value >= thresholds.excellent) return "text-green-600 bg-green-50 border-green-200";
-        if (value >= thresholds.good) return "text-blue-600 bg-blue-50 border-blue-200";
-        if (value >= thresholds.fair) return "text-yellow-600 bg-yellow-50 border-yellow-200";
-        return "text-red-600 bg-red-50 border-red-200";
+        if (value >= thresholds.excellent) return "border-emerald-200 bg-emerald-50 text-emerald-900";
+        if (value >= thresholds.good) return "border-sky-200 bg-sky-50 text-sky-900";
+        if (value >= thresholds.fair) return "border-amber-200 bg-amber-50 text-amber-900";
+        return "border-rose-200 bg-rose-50 text-rose-900";
     };
 
     const stats = [
         {
             label: "Net WPM",
             value: netWpm,
-            icon: "⚡",
             description: "Words per minute (adjusted for errors)",
             colorClass: getColorClass(netWpm, { excellent: 60, good: 40, fair: 25 })
         },
         {
             label: "Gross WPM",
             value: wpm,
-            icon: "📈",
             description: "Raw typing speed",
             colorClass: getColorClass(wpm, { excellent: 70, good: 50, fair: 30 })
         },
         {
             label: "Accuracy",
             value: `${accuracy}%`,
-            icon: "🎯",
             description: "Percentage of correct characters",
             colorClass: getColorClass(accuracy, { excellent: 95, good: 90, fair: 80 })
         },
         {
             label: "Consistency",
             value: `${consistency}%`,
-            icon: "⏱️",
             description: "Stability of typing rhythm",
             colorClass: getColorClass(consistency, { excellent: 80, good: 60, fair: 40 })
         }
     ];
 
     return (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
             {stats.map((stat, index) => (
                 <div
                     key={index}
-                    className={`p-4 rounded-xl border-2 transition-all duration-200 transform hover:scale-105 hover:shadow-lg ${stat.colorClass}`}
+                    className={`rounded-md border p-4 transition-colors ${stat.colorClass}`}
                     title={stat.description}
                 >
-                    <div className="text-center">
-                        <div className="text-2xl mb-2">{stat.icon}</div>
-                        <div className="text-2xl font-bold mb-1">{stat.value}</div>
-                        <div className="text-sm font-medium">{stat.label}</div>
+                    <div>
+                        <div className="text-2xl font-semibold leading-none mb-2">{stat.value}</div>
+                        <div className="text-xs font-medium uppercase tracking-wide opacity-70">{stat.label}</div>
                     </div>
                 </div>
             ))}
 
             {/* Additional error breakdown */}
             {errors > 0 && (
-                <div className="col-span-2 lg:col-span-4 mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
-                    <div className="flex items-center justify-between text-sm">
-                        <span className="text-red-700">
+                <div className="col-span-2 lg:col-span-4 mt-2 rounded-md border border-rose-200 bg-rose-50 p-3">
+                    <div className="flex items-center justify-between gap-4 text-sm text-rose-900">
+                        <span>
                             <strong>{errors}</strong> total errors •
                             <strong> {Math.round((errors / typedText.length) * 100)}%</strong> error rate
                         </span>
-                        <span className="text-red-600">
+                        <span className="shrink-0">
                             -{Math.round(errors / (timeElapsed / 60))} WPM penalty
                         </span>
                     </div>

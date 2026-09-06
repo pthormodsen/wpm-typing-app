@@ -1,3 +1,5 @@
+import { Pause, Play } from "lucide-react";
+
 // src/components/Timer.jsx
 export default function Timer({ seconds, isActive, onToggle, initialTime = 60 }) {
     const formatTime = (time) => {
@@ -13,20 +15,20 @@ export default function Timer({ seconds, isActive, onToggle, initialTime = 60 })
     // Color based on remaining time
     const getTimerColor = () => {
         const percentage = (seconds / initialTime) * 100;
-        if (percentage > 50) return "text-green-500";
-        if (percentage > 25) return "text-yellow-500";
-        return "text-red-500";
+        if (percentage > 50) return "text-emerald-700";
+        if (percentage > 25) return "text-amber-700";
+        return "text-rose-700";
     };
 
     const getProgressColor = () => {
         const percentage = (seconds / initialTime) * 100;
-        if (percentage > 50) return "stroke-green-500";
-        if (percentage > 25) return "stroke-yellow-500";
-        return "stroke-red-500";
+        if (percentage > 50) return "stroke-emerald-600";
+        if (percentage > 25) return "stroke-amber-600";
+        return "stroke-rose-600";
     };
 
     return (
-        <div className="text-center mb-8">
+        <div className="text-center mb-7">
             {/* Circular Progress Timer */}
             <div className="relative w-32 h-32 mx-auto mb-4">
                 <svg
@@ -41,7 +43,7 @@ export default function Timer({ seconds, isActive, onToggle, initialTime = 60 })
                         stroke="currentColor"
                         strokeWidth="8"
                         fill="none"
-                        className="text-gray-200"
+                        className="text-stone-200"
                     />
                     {/* Progress circle */}
                     <circle
@@ -54,16 +56,16 @@ export default function Timer({ seconds, isActive, onToggle, initialTime = 60 })
                         strokeDasharray={circumference}
                         strokeDashoffset={strokeDashoffset}
                         className={`transition-all duration-1000 ease-in-out ${getProgressColor()}`}
-                        strokeLinecap="round"
+                        strokeLinecap="butt"
                     />
                 </svg>
 
                 {/* Timer display in center */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <div className={`text-2xl font-bold transition-colors duration-300 ${getTimerColor()}`}>
+                    <div className={`text-2xl font-semibold transition-colors duration-300 ${getTimerColor()}`}>
                         {formatTime(seconds)}
                     </div>
-                    <div className="text-xs text-gray-500 mt-1">
+                    <div className="text-xs text-stone-500 mt-1">
                         {Math.round(progress)}%
                     </div>
                 </div>
@@ -72,37 +74,33 @@ export default function Timer({ seconds, isActive, onToggle, initialTime = 60 })
             {/* Start/Pause Button */}
             <button
                 onClick={onToggle}
-                className={`flex items-center gap-3 mx-auto px-8 py-3 rounded-xl text-white font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg ${
+                className={`flex items-center gap-2 mx-auto rounded-md px-5 py-2.5 text-sm font-medium text-white transition-colors ${
                     isActive
-                        ? 'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700'
-                        : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700'
+                        ? 'bg-rose-700 hover:bg-rose-800'
+                        : 'bg-stone-900 hover:bg-stone-800'
                 }`}
             >
-                <span className="text-xl">
-                    {isActive ? '⏸️' : '▶️'}
-                </span>
-                <span className="text-lg">
-                    {isActive ? 'Pause Test' : 'Start Test'}
-                </span>
+                {isActive ? <Pause size={16} aria-hidden="true" /> : <Play size={16} aria-hidden="true" />}
+                {isActive ? 'Pause Test' : 'Start Test'}
             </button>
 
             {/* Status indicator */}
-            <div className="mt-3 text-sm text-gray-600">
+            <div className="mt-3 text-sm text-stone-600">
                 {isActive && (
                     <div className="flex items-center justify-center gap-2">
-                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        <div className="w-2 h-2 rounded-full bg-emerald-600"></div>
                         <span>Test in progress...</span>
                     </div>
                 )}
                 {!isActive && seconds === initialTime && (
                     <div className="flex items-center justify-center gap-2">
-                        <div className="w-2 h-2 bg-gray-500 rounded-full"></div>
+                        <div className="w-2 h-2 rounded-full bg-stone-500"></div>
                         <span>Ready to start</span>
                     </div>
                 )}
                 {!isActive && seconds < initialTime && seconds > 0 && (
                     <div className="flex items-center justify-center gap-2">
-                        <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                        <div className="w-2 h-2 rounded-full bg-amber-600"></div>
                         <span>Test paused</span>
                     </div>
                 )}

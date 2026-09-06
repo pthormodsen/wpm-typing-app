@@ -4,6 +4,7 @@ import TextDisplay from "./components/TextDisplay";
 import TypingInput from "./components/TypingInput";
 import Stats from "./components/Stats";
 import Timer from "./components/Timer";
+import { BarChart3, RotateCcw, Shuffle, X } from "lucide-react";
 import "./index.css";
 import { texts, wordList } from "./data/texts";
 import { calculateAccuracy } from "./utils/typing";
@@ -40,14 +41,8 @@ export default function App() {
     const inputRef = useRef(null);
     const [keystrokes, setKeystrokes] = useState([]); // Track keystroke timing
 
-    // Generate words based on difficulty
     const generateWordsByDifficulty = (count) => {
-        let wordPool = wordList;
-        if (difficulty === "easy") {
-            wordPool = wordList.filter(word => word.length <= 4);
-        } else if (difficulty === "hard") {
-            wordPool = [...wordList, ...wordList.filter(word => word.length > 6)];
-        }
+        const wordPool = wordList[difficulty] || wordList.medium;
         return Array.from({ length: count }, () => wordPool[Math.floor(Math.random() * wordPool.length)]).join(' ');
     };
 
@@ -236,34 +231,34 @@ export default function App() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
+        <div className="min-h-screen bg-stone-100 py-6 text-stone-900 sm:py-10">
             <div className="w-full max-w-6xl mx-auto px-4">
                 {/* Header with improved styling */}
-                <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
+                <div className="rounded-lg border border-stone-200 bg-white/90 p-5 shadow-sm mb-5 sm:p-6">
                     <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
                         <div>
-                            <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
+                            <h1 className="text-3xl font-semibold tracking-normal text-stone-950 mb-2 sm:text-4xl">
                                 WPM Typing Test
                             </h1>
-                            <p className="text-gray-600 text-lg">Test your typing speed and accuracy</p>
+                            <p className="text-stone-600">Test your typing speed and accuracy</p>
                             {personalBest.wpm > 0 && (
-                                <p className="text-sm text-green-600 mt-1">
-                                    🏆 Personal Best: {personalBest.wpm} WPM ({personalBest.accuracy}% accuracy)
+                                <p className="text-sm text-stone-500 mt-2">
+                                    Personal best: <span className="font-medium text-stone-800">{personalBest.wpm} WPM</span> ({personalBest.accuracy}% accuracy)
                                 </p>
                             )}
                         </div>
 
-                        <div className="flex flex-col gap-4">
+                        <div className="flex w-full flex-col gap-3 lg:w-auto">
                             {/* Mode Selection */}
-                            <div className="flex bg-gray-100 rounded-xl p-1">
+                            <div className="flex rounded-md border border-stone-200 bg-stone-100 p-1">
                                 <button
-                                    className={`px-4 py-2 rounded-lg transition-all ${mode === "sentences" ? "bg-white shadow-md text-blue-600 font-semibold" : "text-gray-600 hover:text-gray-800"}`}
+                                    className={`flex-1 rounded px-4 py-2 text-sm transition-colors lg:flex-none ${mode === "sentences" ? "bg-white text-stone-950 shadow-sm font-medium" : "text-stone-600 hover:text-stone-900"}`}
                                     onClick={() => setMode("sentences")}
                                 >
                                     Sentences
                                 </button>
                                 <button
-                                    className={`px-4 py-2 rounded-lg transition-all ${mode === "words" ? "bg-white shadow-md text-blue-600 font-semibold" : "text-gray-600 hover:text-gray-800"}`}
+                                    className={`flex-1 rounded px-4 py-2 text-sm transition-colors lg:flex-none ${mode === "words" ? "bg-white text-stone-950 shadow-sm font-medium" : "text-stone-600 hover:text-stone-900"}`}
                                     onClick={() => setMode("words")}
                                 >
                                     Words
@@ -271,11 +266,11 @@ export default function App() {
                             </div>
 
                             {/* Time Selection */}
-                            <div className="flex gap-2">
+                            <div className="flex flex-wrap gap-2">
                                 {[15, 30, 60, 120].map(time => (
                                     <button
                                         key={time}
-                                        className={`px-3 py-1 rounded-lg text-sm transition-all ${timeLimit === time ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300"}`}
+                                        className={`rounded-md border px-3 py-1.5 text-sm transition-colors ${timeLimit === time ? "border-stone-900 bg-stone-900 text-white" : "border-stone-200 bg-white text-stone-600 hover:border-stone-300 hover:text-stone-900"}`}
                                         onClick={() => setTimeLimit(time)}
                                     >
                                         {time < 60 ? `${time}s` : `${time/60}m`}
@@ -285,11 +280,11 @@ export default function App() {
 
                             {/* Difficulty Selection (for words mode) */}
                             {mode === "words" && (
-                                <div className="flex gap-2">
+                                <div className="flex flex-wrap gap-2">
                                     {["easy", "medium", "hard"].map(diff => (
                                         <button
                                             key={diff}
-                                            className={`px-3 py-1 rounded-lg text-sm capitalize transition-all ${difficulty === diff ? "bg-purple-600 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300"}`}
+                                            className={`rounded-md border px-3 py-1.5 text-sm capitalize transition-colors ${difficulty === diff ? "border-stone-900 bg-stone-900 text-white" : "border-stone-200 bg-white text-stone-600 hover:border-stone-300 hover:text-stone-900"}`}
                                             onClick={() => setDifficulty(diff)}
                                         >
                                             {diff}
@@ -302,7 +297,7 @@ export default function App() {
                 </div>
 
                 {/* Main Content */}
-                <div className="bg-white rounded-2xl shadow-xl p-8">
+                <div className="rounded-lg border border-stone-200 bg-white p-5 shadow-sm sm:p-6">
                     <Timer
                         seconds={seconds}
                         isActive={timerActive}
@@ -329,42 +324,45 @@ export default function App() {
                     />
 
                     {/* Action Buttons */}
-                    <div className="flex justify-center gap-4 mt-8">
+                    <div className="flex flex-col justify-center gap-3 mt-7 sm:flex-row">
                         <button
                             onClick={resetTest}
-                            className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-xl hover:from-gray-600 hover:to-gray-700 transition-all transform hover:scale-105 shadow-lg"
+                            className="inline-flex items-center justify-center gap-2 rounded-md border border-stone-300 bg-white px-5 py-2.5 text-sm font-medium text-stone-700 transition-colors hover:border-stone-400 hover:bg-stone-50"
                         >
-                            🔄 Reset Test
+                            <RotateCcw size={16} aria-hidden="true" />
+                            Reset Test
                         </button>
                         <button
                             onClick={nextText}
-                            className="px-8 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:from-green-600 hover:to-green-700 transition-all transform hover:scale-105 shadow-lg"
+                            className="inline-flex items-center justify-center gap-2 rounded-md bg-stone-900 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-stone-800"
                         >
-                            ⏭️ New Text
+                            <Shuffle size={16} aria-hidden="true" />
+                            New Text
                         </button>
                         {testHistory.length > 0 && (
                             <button
                                 onClick={() => setShowResults(true)}
-                                className="px-8 py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl hover:from-purple-600 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg"
+                                className="inline-flex items-center justify-center gap-2 rounded-md border border-stone-300 bg-white px-5 py-2.5 text-sm font-medium text-stone-700 transition-colors hover:border-stone-400 hover:bg-stone-50"
                             >
-                                📊 View History
+                                <BarChart3 size={16} aria-hidden="true" />
+                                View History
                             </button>
                         )}
                     </div>
 
                     {/* Keyboard shortcuts info */}
-                    <div className="mt-6 text-center text-sm text-gray-500">
-                        <p>💡 Tips: Press <kbd className="px-2 py-1 bg-gray-100 rounded">Escape</kbd> to restart, <kbd className="px-2 py-1 bg-gray-100 rounded">Ctrl+Enter</kbd> to start/pause</p>
+                    <div className="mt-5 text-center text-sm text-stone-500">
+                        <p>Press <kbd className="rounded border border-stone-200 bg-stone-50 px-2 py-1 font-mono text-xs text-stone-700">Escape</kbd> to restart, <kbd className="rounded border border-stone-200 bg-stone-50 px-2 py-1 font-mono text-xs text-stone-700">Ctrl+Enter</kbd> to start/pause</p>
                     </div>
 
                     {/* Test Complete Message */}
                     {testComplete && !showResults && (
-                        <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 rounded-xl text-center">
-                            <h3 className="text-xl font-semibold text-blue-800 mb-2">
-                                Test Complete! 🎉
+                        <div className="mt-8 rounded-lg border border-stone-200 bg-stone-50 p-5 text-center">
+                            <h3 className="text-xl font-semibold text-stone-900 mb-2">
+                                Test Complete
                             </h3>
-                            <p className="text-blue-700">
-                                Great job! Your results have been saved automatically.
+                            <p className="text-stone-600">
+                                Your results have been saved automatically.
                             </p>
                         </div>
                     )}
@@ -372,27 +370,28 @@ export default function App() {
 
                 {/* Results Modal */}
                 {showResults && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                        <div className="bg-white rounded-xl p-6 w-full max-w-2xl max-h-96 overflow-y-auto">
+                    <div className="fixed inset-0 bg-stone-950/45 flex items-center justify-center z-50 p-4">
+                        <div className="bg-white rounded-lg border border-stone-200 p-5 w-full max-w-2xl max-h-96 overflow-y-auto shadow-xl">
                             <div className="flex justify-between items-center mb-4">
-                                <h3 className="text-xl font-bold text-gray-800">Test History</h3>
+                                <h3 className="text-xl font-semibold text-stone-900">Test History</h3>
                                 <button
                                     onClick={() => setShowResults(false)}
-                                    className="text-gray-500 hover:text-gray-700 text-2xl"
+                                    className="rounded-md p-1 text-stone-500 transition-colors hover:bg-stone-100 hover:text-stone-800"
+                                    aria-label="Close test history"
                                 >
-                                    ×
+                                    <X size={20} aria-hidden="true" />
                                 </button>
                             </div>
                             <div className="space-y-3">
                                 {testHistory.slice(0, 10).map((test, index) => (
-                                    <div key={index} className="p-3 bg-gray-50 rounded-lg flex justify-between items-center">
+                                    <div key={index} className="flex items-center justify-between rounded-md border border-stone-200 bg-stone-50 p-3">
                                         <div>
-                                            <div className="font-semibold">{test.netWpm} WPM ({test.accuracy}% accuracy)</div>
-                                            <div className="text-sm text-gray-600">
+                                            <div className="font-medium text-stone-900">{test.netWpm} WPM ({test.accuracy}% accuracy)</div>
+                                            <div className="text-sm text-stone-500">
                                                 {test.mode} • {test.difficulty || 'normal'} • {new Date(test.date).toLocaleDateString()}
                                             </div>
                                         </div>
-                                        <div className="text-sm text-gray-500">
+                                        <div className="text-sm text-stone-500">
                                             {test.errors} errors
                                         </div>
                                     </div>

@@ -2,7 +2,7 @@ export default function TextDisplay({ text, typedText }) {
     let globalCharIndex = 0;
 
     return (
-        <div className="mb-6 p-4 bg-gray-50 rounded-lg border-2 border-gray-200 text-lg font-mono leading-relaxed w-full whitespace-pre-wrap break-normal overflow-hidden">
+        <div className="mb-5 w-full overflow-hidden rounded-md border border-stone-200 bg-stone-50 p-4 font-mono text-lg leading-8 text-stone-700 whitespace-pre-wrap break-normal">
             {text.split(' ').map((word, wordIndex) => (
                 <span key={wordIndex} className="inline-block mr-1">
           {word.split('').map((char, charIndex) => {
@@ -11,12 +11,12 @@ export default function TextDisplay({ text, typedText }) {
 
               if (index < typedText.length) {
                   if (typedText[index] === char) {
-                      className += "bg-green-200 text-green-800";
+                      className += "bg-emerald-100 text-emerald-900";
                   } else {
-                      className += "bg-red-200 text-red-800";
+                      className += "bg-rose-100 text-rose-900";
                   }
               } else if (index === typedText.length) {
-                  className += "bg-blue-200 animate-pulse";
+                  className += "bg-stone-300 text-stone-950";
               }
 
               globalCharIndex++;
@@ -34,12 +34,12 @@ export default function TextDisplay({ text, typedText }) {
 
                         if (index < typedText.length) {
                             if (typedText[index] === ' ') {
-                                spaceClass = "bg-green-200 text-green-800";
+                                spaceClass = "bg-emerald-100 text-emerald-900";
                             } else {
-                                spaceClass = "bg-red-200 text-red-800";
+                                spaceClass = "bg-rose-100 text-rose-900";
                             }
                         } else if (index === typedText.length) {
-                            spaceClass = "bg-blue-200 animate-pulse";
+                            spaceClass = "bg-stone-300 text-stone-950";
                         }
 
                         globalCharIndex++;
